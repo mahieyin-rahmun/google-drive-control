@@ -4,4 +4,8 @@ This is a sandbox repository where I experiment with the Google Drive REST API t
 Getting started:
 Head over to https://developers.google.com/drive/api/v3/quickstart/python to activate Drive API and get your credentials.json.
 
-After that it is mostly about using the API ;)
+You need to install the following libraries after that:
+
+`pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib`
+
+Once that's done, it is mostly about using the API ;)
