@@ -1,4 +1,3 @@
-import pickle
 import os
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -15,7 +14,8 @@ def main():
   service = authorizer.authorize()
   
   # Call the Drive v3 API
-  results = service.files().list(pageSize=10, fields="nextPageToken, files(id, name)").execute()
+  results = service.files().list(fields="nextPageToken, files(id, name)").execute()
+  
   items = results.get('files', [])
 
   if not items:
