@@ -32,9 +32,11 @@ def main():
   authorizer = Auth(SCOPES, os.path.join(os.path.abspath('.'), './credentials'), os.path.join(os.path.abspath('.'), './pickled_creds'))
   service = authorizer.authorize()
   
+  parent_folder_name = input("Enter parent folder name")
+  
   # creates one folder with the given name
   parent_metadata = {
-    'name': 'CSE215.3L SAS3 Fall 2019 Assignment Submissions',
+    'name': parent_folder_name,
     'mimeType': 'application/vnd.google-apps.folder'
   }  
   parent_folder = service.files().create(body=parent_metadata, fields='id').execute()
