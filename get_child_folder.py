@@ -5,12 +5,8 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-from Auth import Auth
+from Auth import Auth, SCOPES
 from search_folder import get_folder_id_by_name
-
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/drive.file', 
-		  'https://www.googleapis.com/auth/drive.metadata']
 
 
 def get_child_folders():
@@ -20,7 +16,7 @@ def get_child_folders():
 	authorizer = Auth(SCOPES, os.path.join(os.path.abspath('.'), './credentials'), os.path.join(os.path.abspath('.'), './pickled_creds'))
 	service = authorizer.authorize()
 
-	folder_id = get_folder_id_by_name()
+	folder_id = get_folder_id_by_name(get_id_only=True)
  
 	if folder_id:
 		print(folder_id)
@@ -32,3 +28,6 @@ def get_child_folders():
 		return child_folders
 
 	return None
+
+if __name__ == "__main__":
+	get_child_folders()
