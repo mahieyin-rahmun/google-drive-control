@@ -5,13 +5,9 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-from Auth import Auth
+from Auth import Auth, SCOPES
 
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/drive.file', 
-          'https://www.googleapis.com/auth/drive.metadata']
-
-def get_folder_id_by_name():
+def get_folder_id_by_name(get_id_only=False):
 	# get authorization if not authorized
 	authorizer = Auth(SCOPES, os.path.join(os.path.abspath('.'), './credentials'), os.path.join(os.path.abspath('.'), './pickled_creds'))
 	service = authorizer.authorize()
@@ -29,8 +25,11 @@ def get_folder_id_by_name():
 		return None
 	else:
 		item = items[0]
-		parent_folder_id = f"'{item['id']}'"
-		return parent_folder_id
+		if get_id_only:
+			folder_id = f"'{item['id']}'"
+			return folder_id
+		else:
+			return item
 
 if __name__ == "__main__":
-  main()
+  	get_folder_id_by_name()
