@@ -32,8 +32,11 @@ class Auth:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
+          try:
             flow = InstalledAppFlow.from_client_secrets_file(os.path.join(self.cred_save_path, 'credentials.json'), self.SCOPES)
             creds = flow.run_local_server(port=self.port)
+          except FileNotFoundError:
+            print("Head over to https://developers.google.com/drive/api/v3/quickstart/python to enable the GDrive API and obtain your 'credentials.json' first, which must be put under the 'credentials' folder")
         # Save the credentials for the next run
         with open(os.path.join(self.token_save_path, 'token.pickle'), 'wb') as token:
             pickle.dump(creds, token)

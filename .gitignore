@@ -3,3 +3,4 @@ token.pickle
 __pycache__
 students.json
 email.json
+.vscode

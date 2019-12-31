@@ -44,6 +44,12 @@ def create_nested_folder_structure(service, parent_folder, folder_prefix, studen
         create_student_folders(service, student_ids, folder)
 
 
+def create_necessary_folders(folder_paths):
+    for folder_path in folder_paths:
+        if not os.path.exists(folder_path):
+            os.mkdir(folder_path)
+
+
 def main():
     """
         This script deals with creating a nested folder structure
@@ -69,9 +75,13 @@ def main():
         |_ Student ID #3
         |_ ...
     """
+    # potential issue if the user doesn't have these folders
+    create_necessary_folders([os.path.join(os.path.abspath('.'), 'credentials'), 
+                              os.path.join(os.path.abspath('.'), 'pickled_creds')
+                              ])
     
     # get authorization if not authorized
-    authorizer = Auth(SCOPES, os.path.join(os.path.abspath('.'), './credentials'), os.path.join(os.path.abspath('.'), './pickled_creds'))
+    authorizer = Auth(SCOPES, os.path.join(os.path.abspath('.'), 'credentials'), os.path.join(os.path.abspath('.'), 'pickled_creds'))
     service = authorizer.authorize()
     
     parent_folder_name = input("Enter parent folder name: ")
@@ -86,16 +96,19 @@ def main():
     print(f"Parent folder {parent_folder_name} created with id={parent_folder.get('id')}")
     
     # read json file, where student ids are stored in an array form
-    with open(os.path.join(os.path.abspath('.'), './student_ids/students.json'), 'r') as students_id_file:
-        # get the student ids
-        student_ids = json.load(students_id_file)
-        
-        folder_prefix = input("Enter folder prefix: ")
-        
-        if folder_prefix != '':
-            create_nested_folder_structure(service, parent_folder, folder_prefix, student_ids)
-        else:
-            create_student_folders(service, student_ids, parent_folder)
+    try:
+        with open(os.path.join(os.path.abspath('.'), 'student_ids/students.json'), 'r') as students_id_file:
+            # get the student ids
+            student_ids = json.load(students_id_file)
+            
+            folder_prefix = input("Enter folder prefix: ")
+            
+            if folder_prefix != '':
+                create_nested_folder_structure(service, parent_folder, folder_prefix, student_ids)
+            else:
+                create_student_folders(service, student_ids, parent_folder)
+    except FileNotFoundError:
+        print("Please prepare a students.json file under the student_ids folder.")
 
 
 
